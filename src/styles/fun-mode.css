@@ -1,0 +1,243 @@
+
+.fun-mode-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background: #87ceeb;
+  overflow: hidden;
+}
+
+.fun-element {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+.fun-element.left {
+  left: 10%;
+}
+
+.fun-element.right {
+  right: 10%;
+}
+
+.fun-element-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+  text-align: center;
+  width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.fun-element-content:hover {
+  transform: scale(1.1) rotate(2deg);
+  border-color: rgba(99, 102, 241, 0.6);
+}
+
+.fun-img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5));
+}
+
+.fun-info h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.fun-info p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Jumpscare animation class is handled by GSAP, but we can add some base styles */
+.jumpscare {
+  perspective: 1000px;
+}
+
+/* Glassmorphism utility if not already in global.css */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.fun-exit-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.8rem 1.5rem;
+  color: #fff;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  z-index: 10005;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.fun-exit-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  transform: scale(1.05);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.2rem;
+  font-family: 'Space Grotesk', sans-serif;
+  animation: bounce 2s infinite;
+  z-index: 10005;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+  40% {transform: translateX(-50%) translateY(-10px);}
+  60% {transform: translateX(-50%) translateY(-5px);}
+}
+
+.fun-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10006;
+}
+
+/* Custom Intro Card */
+.fun-element-intro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  z-index: 10001;
+}
+
+.fun-intro-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 3rem;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 800px;
+  max-width: 90vw;
+  gap: 3rem;
+}
+
+.fun-intro-left {
+  flex-shrink: 0;
+}
+
+.fun-intro-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.fun-intro-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fun-intro-right {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: #fff;
+}
+
+.fun-intro-right h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.fun-intro-right h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin: 0 0 1rem 0;
+}
+
+.fun-intro-right p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+}
+
+.fun-story-container {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.fun-story-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.fun-socials {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}

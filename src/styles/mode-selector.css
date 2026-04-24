@@ -1,0 +1,157 @@
+
+.mode-selector {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.mode-selector.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.1);
+}
+
+.mode-selector-content {
+  text-align: center;
+  max-width: 900px;
+  width: 90%;
+}
+
+.mode-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  background: linear-gradient(to right, #fff, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+
+.mode-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.mode-card {
+  padding: 3rem 2rem;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.mode-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.mode-card:hover::before {
+  transform: translateX(100%);
+}
+
+.mode-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.mode-card h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.mode-card p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .mode-cards {
+    grid-template-columns: 1fr;
+  }
+  .mode-title {
+    font-size: 2.5rem;
+  }
+  .mode-cards.rectangular-mode-cards {
+    flex-direction: column;
+  }
+}
+
+.welcome-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.eunoia-logo-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+.eunoia-logo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.welcome-heading h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.mode-cards.rectangular-mode-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.mode-card.rectangular {
+  padding: 1.5rem 3.5rem;
+  width: auto;
+}
+
+.mode-card.rectangular h3 {
+  margin-bottom: 0;
+}
