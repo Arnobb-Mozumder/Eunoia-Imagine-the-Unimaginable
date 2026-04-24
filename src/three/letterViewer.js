@@ -56,7 +56,7 @@ export async function initLetterViewer(canvas) {
     const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js')
     const loader = new GLTFLoader()
 
-    loader.load('/static/letter.glb', (gltf) => {
+    loader.load('/letter.glb', (gltf) => {
       model = gltf.scene
 
       // Center and scale

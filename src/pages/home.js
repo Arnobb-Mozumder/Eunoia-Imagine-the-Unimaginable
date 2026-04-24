@@ -14,7 +14,7 @@ export function renderHome(container) {
         <div class="hero-content">
           <div class="hero-profile">
             <div class="hero-profile-image-wrap">
-              <img src="/static/arnob.png" alt="MD. Al-Amin Mozumder" class="hero-profile-image">
+              <img src="/arnob.png" alt="MD. Al-Amin Mozumder" class="hero-profile-image">
             </div>
             <div class="hero-profile-content">
               <h1 class="hero-profile-name">MD. Al-Amin Mozumder<br>Arnob</h1>
@@ -34,10 +34,10 @@ export function renderHome(container) {
                   <svg viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
                 <a href="https://wa.me/8801621550311" class="social-icon whatsapp-icon" aria-label="WhatsApp" title="WhatsApp">
-                  <img src="/static/whatsapp.png" alt="WhatsApp">
+                  <img src="/whatsapp.png" alt="WhatsApp">
                 </a>
                 <a href="https://www.fiverr.com/arnob_mozumder" class="social-icon fiverr-icon" aria-label="Fiverr" title="Fiverr">
-                  <img src="/static/fiverr.png" alt="Fiverr">
+                  <img src="/fiverr.png" alt="Fiverr">
                 </a>
               </div>
             </div>
@@ -59,7 +59,7 @@ export function renderHome(container) {
           </div>
           <div class="about-right">
             <div class="about-image-box">
-              <img src="/static/eunoia.png" alt="Eunoia" class="about-image">
+              <img src="/eunoia.png" alt="Eunoia" class="about-image">
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@ export function renderHome(container) {
       <section class="profile-section">
         <div class="profile-inner">
           <div class="profile-avatar-wrap">
-            <img src="/static/aru.png" alt="Aru" class="profile-avatar-image">
+            <img src="/aru.png" alt="Aru" class="profile-avatar-image">
             <div class="profile-status">
               <span class="status-dot"></span>
               Available for work
@@ -91,7 +91,7 @@ export function renderHome(container) {
             </p>
             <div class="profile-contacts">
               <a href="https://www.fiverr.com/arnob_mozumder" target="_blank" class="contact-chip fiverr-chip" title="Fiverr">
-                <img src="/static/fiverr.png" alt="Fiverr">
+                <img src="/fiverr.png" alt="Fiverr">
               </a>
               <a href="https://www.facebook.com/amozumder8" target="_blank" class="contact-chip" title="Facebook">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -99,7 +99,7 @@ export function renderHome(container) {
                 </svg>
               </a>
               <a href="https://wa.me/8801621550311" target="_blank" class="contact-chip" title="WhatsApp">
-                <img src="/static/whatsapp.png" alt="WhatsApp">
+                <img src="/whatsapp.png" alt="WhatsApp">
               </a>
               <a href="#/messages" class="contact-chip" title="Send Chithi">
                 <svg viewBox="0 0 24 24" fill="white">
@@ -123,31 +123,31 @@ export function renderHome(container) {
           </div>
           <div class="preview-cards">
             <a href="#/games" class="preview-card reveal" style="--delay:0.1s">
-              <div class="preview-icon"><img src="/static/game.png" alt="Games"></div>
+              <div class="preview-icon"><img src="/game.png" alt="Games"></div>
               <div class="preview-label">Games</div>
               <div class="preview-desc">Play web games or download PC games. ${games.length} titles available.</div>
               <div class="preview-arrow">Explore →</div>
             </a>
             <a href="#/models" class="preview-card reveal" style="--delay:0.15s">
-              <div class="preview-icon"><img src="/static/3dmodel.png" alt="3D Models"></div>
+              <div class="preview-icon"><img src="/3dmodel.png" alt="3D Models"></div>
               <div class="preview-label">3D Models</div>
               <div class="preview-desc">Interactive 3D viewer. Rotate, zoom, inspect every model.</div>
               <div class="preview-arrow">Explore →</div>
             </a>
             <a href="#/animations" class="preview-card reveal" style="--delay:0.2s">
-              <div class="preview-icon"><img src="/static/animation.png" alt="Animations"></div>
+              <div class="preview-icon"><img src="/animation.png" alt="Animations"></div>
               <div class="preview-label">Animations</div>
               <div class="preview-desc">Video animations and motion work. ${animations.length} pieces.</div>
               <div class="preview-arrow">Explore →</div>
             </a>
             <a href="#/writings" class="preview-card reveal" style="--delay:0.25s">
-              <div class="preview-icon"><img src="/static/writing.png" alt="Writings"></div>
+              <div class="preview-icon"><img src="/writing.png" alt="Writings"></div>
               <div class="preview-label">Writings</div>
               <div class="preview-desc">3 A.M. thoughts, sehri tales, reviews & more.</div>
               <div class="preview-arrow">Explore →</div>
             </a>
             <a href="#/messages" class="preview-card reveal" style="--delay:0.3s">
-              <div class="preview-icon"><img src="/static/chithi.png" alt="Chithi"></div>
+              <div class="preview-icon"><img src="/chithi.png" alt="Chithi"></div>
               <div class="preview-label">Chithi</div>
               <div class="preview-desc">Send me an anonymous message. I'd love to hear from you.</div>
               <div class="preview-arrow">Write →</div>
@@ -184,7 +184,7 @@ export function renderFooter() {
       <div class="footer-inner">
         <div class="footer-brand">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div class="logo-mark"><img src="/static/eunoiaf.png" alt="Eunoia" class="logo-image"></div>
+            <div class="logo-mark"><img src="/eunoiaf.png" alt="Eunoia" class="logo-image"></div>
             <span class="logo-text">Eunoia<span class="logo-dot">.</span></span>
           </div>
           <p class="footer-bio">
@@ -198,7 +198,7 @@ export function renderFooter() {
           <p class="footer-copy" title="Email" style="margin-bottom: 2px;">amozumder0@gmail.com</p>
           <div class="social-links-mini">
             <a href="https://www.fiverr.com/arnob_mozumder" target="_blank" class="social-link-mini" title="Fiverr">
-              <img src="/static/fiverr.png" alt="Fiverr">
+              <img src="/fiverr.png" alt="Fiverr">
             </a>
             <a href="https://www.facebook.com/amozumder8" target="_blank" class="social-link-mini" title="Facebook">
               <svg viewBox="0 0 24 24" fill="white">
@@ -206,7 +206,7 @@ export function renderFooter() {
               </svg>
             </a>
             <a href="https://wa.me/8801621550311" target="_blank" class="social-link-mini" title="WhatsApp">
-              <img src="/static/whatsapp.png" alt="WhatsApp">
+              <img src="/whatsapp.png" alt="WhatsApp">
             </a>
             <a href="#/messages" class="social-link-mini" title="Send Chithi">
               <svg viewBox="0 0 24 24" fill="white">

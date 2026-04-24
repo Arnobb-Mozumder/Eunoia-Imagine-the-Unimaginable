@@ -13,11 +13,11 @@ let logoAnimationTime = 0
 let scrollRotationX = 0 // Track scroll rotation
 const LOGO_ROTATION_INTERVAL = 3000 // Rotate every 3 seconds
 const LOGO_MODELS = [
-  { name: 'ThreeJs', path: '/static/ThreeJs.glb' },
-  { name: 'Blender', path: '/static/Blender.glb' },
-  { name: 'Unity', path: '/static/Unity.glb' },
-  { name: 'Notion', path: '/static/Notion.glb' },
-  { name: 'Photoshop', path: '/static/Photoshop.glb' }
+  { name: 'ThreeJs', path: '/ThreeJs.glb' },
+  { name: 'Blender', path: '/Blender.glb' },
+  { name: 'Unity', path: '/Unity.glb' },
+  { name: 'Notion', path: '/Notion.glb' },
+  { name: 'Photoshop', path: '/Photoshop.glb' }
 ]
 
 export function initHeroViewer(canvasEl) {

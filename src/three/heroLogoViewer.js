@@ -10,11 +10,11 @@ let heroScene = null
 let heroRenderer = null
 
 const LOGO_PATHS = [
-  '/static/ThreeJs.glb',
-  '/static/Blender.glb',
-  '/static/Unity.glb',
-  '/static/Notion.glb',
-  '/static/Photoshop.glb'
+  '/ThreeJs.glb',
+  '/Blender.glb',
+  '/Unity.glb',
+  '/Notion.glb',
+  '/Photoshop.glb'
 ]
 
 const LOGO_POSITIONS = [

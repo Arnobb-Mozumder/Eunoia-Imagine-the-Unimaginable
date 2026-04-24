@@ -15,13 +15,13 @@ let touchStartY = 0
 let isInitialized = false
 
 const elementsData = [
-  { type: 'intro', dist: 0.05, img: '/static/arnob.png' },
-  { type: 'eunoia', dist: 0.20, companionText: 'This space is a collection of my work, ranging from game development and 3D modeling to animation and writing. Feel free to explore the site and take your time discovering each section.', img: '/static/eunoia.png' },
-  { type: 'models', dist: 0.35, side: 'left', title: 'Models', subtitle: 'My 3D modeling projects', img: '/static/3dmodel.png', link: '#/models', companionText: 'Would you like to see some works from this amateur artist?' },
-  { type: 'games', dist: 0.50, side: 'right', title: 'Games', subtitle: 'Playable game experiences', img: '/static/game.png', link: '#/games', companionText: "Let's play my games!" },
-  { type: 'animations', dist: 0.65, side: 'left', title: 'Animations', subtitle: 'Animated visual stories', img: '/static/animation.png', link: '#/animations', companionText: 'Wanna watch some cool stuff?' },
-  { type: 'writings', dist: 0.80, side: 'right', title: 'Writings', subtitle: 'Thoughts and stories', img: '/static/writing.png', link: '#/writings', companionText: 'I think a lot, would you mind giving this a try?' },
-  { type: 'chithi', dist: 0.95, side: 'left', title: 'Chithi', subtitle: 'Send an anonymous message', img: '/static/chithi.png', link: '#/messages', companionText: 'I would truly appreciate it if you shared a few words in Chithi. You can write anonymously if you prefer; the only thing that matters is your thoughts.<br><br>Thank you for visiting and exploring.' }
+  { type: 'intro', dist: 0.05, img: '/arnob.png' },
+  { type: 'eunoia', dist: 0.20, companionText: 'This space is a collection of my work, ranging from game development and 3D modeling to animation and writing. Feel free to explore the site and take your time discovering each section.', img: '/eunoia.png' },
+  { type: 'models', dist: 0.35, side: 'left', title: 'Models', subtitle: 'My 3D modeling projects', img: '/3dmodel.png', link: '#/models', companionText: 'Would you like to see some works from this amateur artist?' },
+  { type: 'games', dist: 0.50, side: 'right', title: 'Games', subtitle: 'Playable game experiences', img: '/game.png', link: '#/games', companionText: "Let's play my games!" },
+  { type: 'animations', dist: 0.65, side: 'left', title: 'Animations', subtitle: 'Animated visual stories', img: '/animation.png', link: '#/animations', companionText: 'Wanna watch some cool stuff?' },
+  { type: 'writings', dist: 0.80, side: 'right', title: 'Writings', subtitle: 'Thoughts and stories', img: '/writing.png', link: '#/writings', companionText: 'I think a lot, would you mind giving this a try?' },
+  { type: 'chithi', dist: 0.95, side: 'left', title: 'Chithi', subtitle: 'Send an anonymous message', img: '/chithi.png', link: '#/messages', companionText: 'I would truly appreciate it if you shared a few words in Chithi. You can write anonymously if you prefer; the only thing that matters is your thoughts.<br><br>Thank you for visiting and exploring.' }
 ]
 
 export function initFunMode() {

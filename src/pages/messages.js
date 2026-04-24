@@ -164,7 +164,7 @@ function showSuccess() {
   const wrap = document.getElementById('chithi-form-wrap')
   wrap.innerHTML = `
     <div class="success-message">
-      <span class="success-icon"><img src="/static/success.png" class="chithi-success-img" alt="success"></span>
+      <span class="success-icon"><img src="/success.png" class="chithi-success-img" alt="success"></span>
       <h2 class="success-title">Chithi Sent!</h2>
       <p class="success-text">Your message has been delivered. Arnob will read it soon.</p>
       <button class="btn btn-primary" onclick="document.getElementById('chithi-form-wrap').innerHTML=''; window.renderMessages && window.renderMessages()">Send Another</button>
@@ -176,7 +176,7 @@ function showSuccess() {
     if (wrap2) {
       wrap2.innerHTML = `
         <div class="success-message">
-          <span class="success-icon"><img src="/static/success.png" class="chithi-success-img" alt="success"></span>
+          <span class="success-icon"><img src="/success.png" class="chithi-success-img" alt="success"></span>
           <h2 class="success-title">Chithi Sent!</h2>
           <p class="success-text">Your message has been delivered. Arnob will read it soon.</p>
           <a href="#/" class="btn btn-primary">← Back Home</a>
