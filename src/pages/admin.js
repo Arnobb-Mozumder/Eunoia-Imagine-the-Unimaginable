@@ -510,22 +510,56 @@ function setupAdminPanel(container) {
       const originalText = submitBtn.textContent
 
       try {
-        submitBtn.disabled = true; submitBtn.textContent = '⏳ Saving...'
-        const payload = {
-          title: document.getElementById('game-title').value,
-          type: document.getElementById('game-type').value,
-          platform: document.getElementById('game-platform').value,
-          genre: document.getElementById('game-genre').value,
-          description: document.getElementById('game-desc').value,
-          playUrl: document.getElementById('game-play-url').value,
-          embedUrl: document.getElementById('game-embed').value,
-          year: document.getElementById('game-year').value
+        const title = document.getElementById('game-title').value.trim()
+        const typeInput = document.getElementById('game-type').value.trim().toLowerCase()
+        const platform = document.getElementById('game-platform').value.trim()
+        const genre = document.getElementById('game-genre').value.trim()
+        const description = document.getElementById('game-desc').value.trim()
+        const embedUrl = document.getElementById('game-embed').value.trim()
+        const playUrl = document.getElementById('game-play-url').value.trim()
+        const downloadUrl = document.getElementById('game-download').value.trim()
+
+        // Backend and UI use these categories for filtering/display.
+        const normalizedType = ['web', 'unity', 'pc', 'mobile'].includes(typeInput)
+          ? typeInput
+          : 'web'
+
+        if (!title || !platform || !genre || !description) {
+          showStatus('game-status', '❌ Please fill title, platform, genre, and description')
+          return
         }
+
+        submitBtn.disabled = true; submitBtn.textContent = '⏳ Saving...'
+
+        const formData = new FormData()
+        formData.append('title', title)
+        formData.append('type', normalizedType)
+        formData.append('platform', platform)
+        formData.append('genre', genre)
+        formData.append('description', description)
+        formData.append('embedUrl', embedUrl)
+        formData.append('downloadUrl', downloadUrl || playUrl)
+        formData.append('year', document.getElementById('game-year').value)
+        formData.append('tags', document.getElementById('game-tags').value)
+        formData.append('featured', document.getElementById('game-featured').checked ? 'true' : 'false')
+
+        const howToPlayLines = document.getElementById('game-howtop').value
+          .split('\n')
+          .map(line => line.trim())
+          .filter(Boolean)
+        if (howToPlayLines.length) {
+          formData.append('howToPlay', JSON.stringify(howToPlayLines))
+        }
+
+        const thumbUrl = document.getElementById('game-thumb').value.trim()
+        if (thumbUrl) formData.append('thumbnail', thumbUrl)
+        const thumbFile = document.getElementById('game-thumb-file').files?.[0]
+        if (thumbFile) formData.append('thumbnailFile', thumbFile)
 
         const response = await fetch(`${API_URL}/api/games`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
-          body: JSON.stringify(payload)
+          headers: { 'x-admin-key': ADMIN_KEY },
+          body: formData
         })
         const data = await response.json()
         if (data.success) {
