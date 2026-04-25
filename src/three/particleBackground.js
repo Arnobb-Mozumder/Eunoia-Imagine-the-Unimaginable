@@ -5,6 +5,7 @@
 // ==========================================
 
 import * as THREE from 'three'
+import { getThreeQualitySettings } from '../utils/devicePerformance.js'
 
 let particleScene = null
 let particleRenderer = null
@@ -22,6 +23,9 @@ let mouseX = 0
 let mouseY = 0
 let prevMouseX = 0
 let prevMouseY = 0
+let quality = getThreeQualitySettings()
+let frameIntervalMs = 1000 / 60
+let lastRenderTime = 0
 
 // World-space cursor position (projected onto the sphere interaction plane)
 let cursorWorld = new THREE.Vector3(0, 0, 0)
@@ -135,6 +139,9 @@ export function initParticleBackground(canvasEl) {
   if (!canvasEl || particleScene) return
 
   console.log('Initializing particle background...')
+  quality = getThreeQualitySettings()
+  frameIntervalMs = 1000 / Math.max(1, quality.targetFps)
+  lastRenderTime = 0
 
   const W = window.innerWidth
   const H = window.innerHeight
@@ -144,9 +151,10 @@ export function initParticleBackground(canvasEl) {
   canvasEl.width = W
   canvasEl.height = H
 
-  const adjustedParticleCount = window.devicePixelRatio < 2
-    ? Math.min(CONFIG.particleCount, 2000)
-    : CONFIG.particleCount
+  const adjustedParticleCount = Math.max(
+    280,
+    Math.floor(CONFIG.particleCount * quality.particleCountScale)
+  )
   particleCount = adjustedParticleCount
 
   particleScene = new THREE.Scene()
@@ -157,12 +165,12 @@ export function initParticleBackground(canvasEl) {
 
   particleRenderer = new THREE.WebGLRenderer({
     canvas: canvasEl,
-    antialias: true,
+    antialias: quality.antialias,
     alpha: false,
     powerPreference: 'high-performance'
   })
   particleRenderer.setSize(W, H)
-  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
   particleRenderer.setClearColor(0x000000, 1)
 
   createParticleSystem()
@@ -490,6 +498,9 @@ function onCanvasClick() {
 
 function animate() {
   animationFrameId = requestAnimationFrame(animate)
+  const now = performance.now()
+  if (document.hidden || now - lastRenderTime < frameIntervalMs) return
+  lastRenderTime = now
 
   // 1. Compute base positions from scroll morph shape
   generateMorphShape(scrollValue)
@@ -542,6 +553,7 @@ function onWindowResize() {
   particleCamera.aspect = W / H
   particleCamera.updateProjectionMatrix()
   particleRenderer.setSize(W, H)
+  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
 }
 
 // ─── Cleanup ──────────────────────────────────────────────────────────────────

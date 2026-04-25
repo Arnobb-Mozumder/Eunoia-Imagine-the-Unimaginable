@@ -26,6 +26,7 @@ const elementsData = [
 
 export function initFunMode() {
   if (isInitialized) return
+  window.exitFunMode = exitFunMode
   
   const container = document.createElement('div')
   container.id = 'fun-mode-container'
@@ -37,8 +38,7 @@ export function initFunMode() {
   document.body.appendChild(container)
 
   document.getElementById('fun-exit-btn').onclick = () => {
-    exitFunMode()
-    document.getElementById('mode-selector').classList.remove('hidden')
+    exitFunMode({ returnToSelector: true })
   }
 
   scene = new THREE.Scene()
@@ -645,7 +645,7 @@ function spawnElement(data) {
       <div class="glass" style="padding: 2.5rem; border-radius: 30px; width: 90vw; max-width: 350px; text-align: left; border: 1px solid rgba(255,255,255,0.1);">
         <p style="font-size: 1.05rem; color: #cbd5e1; line-height: 1.6; margin: 0 0 2rem 0;">with expertise in Blender, Unity, Threejs, and Photoshop, delivering creative and technical solutions.</p>
         <div class="fun-story-container">
-          <a href="#/story" class="fun-story-link" onclick="window.location.hash='#/story'; document.getElementById('fun-exit-btn').click(); return false;">My Story &rarr;</a>
+          <a href="#/story" class="fun-story-link" onclick="window.location.hash='#/story'; window.exitFunMode && window.exitFunMode(); return false;">My Story &rarr;</a>
         </div>
         <div class="fun-socials">
           <a href="#" class="social-icon">in</a>
@@ -723,12 +723,21 @@ function removeElement(data) {
   }
 }
 
-export function exitFunMode() {
+export function exitFunMode(options = {}) {
+  const { returnToSelector = false } = options
   const c = document.getElementById('fun-mode-container')
   if (c) {
     c.remove()
     isInitialized = false
-    document.getElementById('app').classList.remove('hidden')
+    const app = document.getElementById('app')
+    const selector = document.getElementById('mode-selector')
+
+    if (returnToSelector) {
+      app?.classList.add('hidden')
+      selector?.classList.remove('hidden')
+    } else {
+      app?.classList.remove('hidden')
+    }
     
     // Cleanup listeners
     window.removeEventListener('wheel', onScroll)

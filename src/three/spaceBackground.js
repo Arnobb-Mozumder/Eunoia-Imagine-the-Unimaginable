@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { getThreeQualitySettings } from '../utils/devicePerformance.js'
 
 let particleScene = null
 let particleRenderer = null
@@ -10,6 +11,9 @@ let mouseX = 0
 let mouseY = 0
 let targetMouseX = 0
 let targetMouseY = 0
+let quality = getThreeQualitySettings()
+let frameIntervalMs = 1000 / 60
+let lastRenderTime = 0
 
 // Space configurations
 const STAR_COUNT = 3000
@@ -23,6 +27,9 @@ let asteroidSpawnTimes = null
 
 export function initParticleBackground(canvasEl) {
   if (!canvasEl || particleScene) return
+  quality = getThreeQualitySettings()
+  frameIntervalMs = 1000 / Math.max(1, quality.targetFps)
+  lastRenderTime = 0
 
   const W = window.innerWidth
   const H = window.innerHeight
@@ -41,12 +48,12 @@ export function initParticleBackground(canvasEl) {
 
   particleRenderer = new THREE.WebGLRenderer({
     canvas: canvasEl,
-    antialias: true,
+    antialias: quality.antialias,
     alpha: false,
     powerPreference: 'high-performance'
   })
   particleRenderer.setSize(W, H)
-  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
 
   createStars()
   createAsteroids()
@@ -58,11 +65,12 @@ export function initParticleBackground(canvasEl) {
 }
 
 function createStars() {
+  const starCount = Math.max(700, Math.floor(STAR_COUNT * quality.particleCountScale))
   const geo = new THREE.BufferGeometry()
-  const pos = new Float32Array(STAR_COUNT * 3)
-  const sizes = new Float32Array(STAR_COUNT)
+  const pos = new Float32Array(starCount * 3)
+  const sizes = new Float32Array(starCount)
 
-  for(let i=0; i<STAR_COUNT; i++) {
+  for(let i=0; i<starCount; i++) {
     const i3 = i * 3
     pos[i3] = (Math.random() - 0.5) * RADIUS * 2
     pos[i3+1] = (Math.random() - 0.5) * RADIUS * 2
@@ -112,13 +120,14 @@ function createStars() {
 }
 
 function createAsteroids() {
+  const asteroidCount = Math.max(2, Math.floor(ASTEROID_COUNT * Math.max(0.5, quality.particleCountScale)))
   const geo = new THREE.BufferGeometry()
-  const pos = new Float32Array(ASTEROID_COUNT * 3)
-  const sizes = new Float32Array(ASTEROID_COUNT)
-  const rotations = new Float32Array(ASTEROID_COUNT)
-  asteroidSpawnTimes = new Float32Array(ASTEROID_COUNT)
+  const pos = new Float32Array(asteroidCount * 3)
+  const sizes = new Float32Array(asteroidCount)
+  const rotations = new Float32Array(asteroidCount)
+  asteroidSpawnTimes = new Float32Array(asteroidCount)
 
-  for(let i=0; i<ASTEROID_COUNT; i++) {
+  for(let i=0; i<asteroidCount; i++) {
     const i3 = i * 3
     pos[i3] = 0
     pos[i3+1] = 0
@@ -187,6 +196,9 @@ function onMouseMove(e) {
 
 function animate() {
   animationFrameId = requestAnimationFrame(animate)
+  const nowForFrame = performance.now()
+  if (document.hidden || nowForFrame - lastRenderTime < frameIntervalMs) return
+  lastRenderTime = nowForFrame
 
   // Subtle camera tilt for depth feel
   mouseX += (targetMouseX - mouseX) * 0.05
@@ -213,8 +225,9 @@ function animate() {
     const now = Date.now()
     const positions = asteroidGroup.geometry.attributes.position.array
     const rotations = asteroidGroup.geometry.attributes.rotation.array
+    const asteroidCount = asteroidSpawnTimes.length
     
-    for(let i=0; i<ASTEROID_COUNT; i++) {
+    for(let i=0; i<asteroidCount; i++) {
       const i3 = i * 3
       
       // Check if it's time to spawn
@@ -253,6 +266,7 @@ function onWindowResize() {
   particleCamera.aspect = W / H
   particleCamera.updateProjectionMatrix()
   particleRenderer.setSize(W, H)
+  particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
 }
 
 export function cleanupParticleBackground() {

@@ -4,6 +4,7 @@
 // ==========================================
 
 import * as THREE from 'three'
+import { getThreeQualitySettings } from '../utils/devicePerformance.js'
 
 let scene, camera, renderer, model, animId
 let isDown = false
@@ -12,10 +13,16 @@ let spherical = { theta: 0, phi: Math.PI / 2 }
 let radius = 4
 let resizeObs
 let startTime = Date.now()
+let quality = getThreeQualitySettings()
+let frameIntervalMs = 1000 / 60
+let lastRenderTime = 0
 
 export function initModelViewer(canvas, glbUrl) {
   cleanupModelViewer()
   startTime = Date.now()
+  quality = getThreeQualitySettings()
+  frameIntervalMs = 1000 / Math.max(1, quality.targetFps)
+  lastRenderTime = 0
 
   const W = canvas.clientWidth || canvas.offsetWidth
   const H = canvas.clientHeight || canvas.offsetHeight
@@ -26,12 +33,12 @@ export function initModelViewer(canvas, glbUrl) {
   camera = new THREE.PerspectiveCamera(45, W / H, 0.01, 1000)
   updateCameraFromSpherical()
 
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: quality.antialias, powerPreference: 'high-performance' })
   renderer.setSize(W, H)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.shadowMap.enabled = true
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
+  renderer.shadowMap.enabled = quality.enableShadows
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
-  renderer.shadowMap.resolution = 1024
+  renderer.shadowMap.resolution = quality.enableShadows ? 1024 : 256
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.2
 
@@ -41,9 +48,9 @@ export function initModelViewer(canvas, glbUrl) {
   // Key light (warm)
   const key = new THREE.DirectionalLight(0xffb347, 2)
   key.position.set(8, 12, 8)
-  key.castShadow = true
-  key.shadow.mapSize.width = 2048
-  key.shadow.mapSize.height = 2048
+  key.castShadow = quality.enableShadows
+  key.shadow.mapSize.width = quality.enableShadows ? 1024 : 256
+  key.shadow.mapSize.height = quality.enableShadows ? 1024 : 256
   scene.add(key)
   
   // Fill light (cyan/blue)
@@ -142,6 +149,9 @@ function updateCameraFromSpherical() {
 
 function animateModel() {
   animId = requestAnimationFrame(animateModel)
+  const now = performance.now()
+  if (document.hidden || now - lastRenderTime < frameIntervalMs) return
+  lastRenderTime = now
   
   // Rotate model when not dragging
   if (model && !isDown) {
