@@ -14,7 +14,7 @@ const upload = multer({
 // Create/Save game
 router.post('/', auth, upload.fields([{ name: 'thumbnailFile', maxCount: 1 }]), async (req, res) => {
   try {
-    const { title, type, platform, genre, description, embedUrl, downloadUrl, howToPlay, tags, year, featured } = req.body
+    const { title, type, platform, genre, description, embedUrl, downloadUrl, howToPlay, tags, year, featured, thumbnail } = req.body
     const thumbnailFile = req.files?.thumbnailFile?.[0]
 
     if (!title || !type || !platform || !genre || !description) {
@@ -59,7 +59,7 @@ router.post('/', auth, upload.fields([{ name: 'thumbnailFile', maxCount: 1 }]), 
       description,
       embedUrl: embedUrl || null,
       downloadUrl: downloadUrl || null,
-      thumbnail: thumbnailUrl || '',
+      thumbnail: thumbnailUrl || thumbnail || '',
       howToPlay: howToPlay ? (typeof howToPlay === 'string' ? JSON.parse(howToPlay) : howToPlay) : [],
       tags: tags ? tags.split(',').map(t => t.trim()) : [],
       year: parseInt(year) || new Date().getFullYear(),
