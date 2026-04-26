@@ -31,6 +31,10 @@ let lastRenderTime = 0
 let cursorWorld = new THREE.Vector3(0, 0, 0)
 let cursorInsideSphere = false
 
+// Responsive scale factors based on viewport
+let sphereRadiusScale = 1.0
+let particleSizeScale = 1.0
+
 const CONFIG = {
   particleCount: 1200,
   particleSize: 1.5,
@@ -119,6 +123,33 @@ function ndcToWorld(nx, ny, worldZ, camera) {
   return new THREE.Vector3(nx * halfW, ny * halfH, worldZ)
 }
 
+/**
+ * Calculate responsive scaling factors to maintain proportional particle sphere size on all devices
+ * On mobile, the sphere should take up approximately the same % of viewport height as desktop
+ */
+function calculateResponsiveScale() {
+  const W = window.innerWidth
+  const H = window.innerHeight
+  const baselineHeight = 1080  // Reference desktop height
+  const baselineWidth = 1920   // Reference desktop width
+  
+  // Scale based on viewport height to maintain proportional size
+  const heightScale = H / baselineHeight
+  
+  // Use a blend between height and width, but favor height for portrait mobile
+  const isPortrait = H > W
+  const scale = isPortrait 
+    ? Math.max(heightScale * 0.6, 0.4)  // Mobile portrait: reduce to 60% of height scale, min 40%
+    : heightScale                         // Desktop/landscape: use full height scale
+  
+  // Particle size needs boosting on mobile for visibility with reduced particle count
+  // Balance reduced particles with larger size to maintain visual density
+  const particleBoost = quality.particleCountScale < 0.7 ? 1.3 : 1.0
+  
+  sphereRadiusScale = Math.max(scale, 0.4)  // Ensure minimum sphere size even on tiny screens
+  particleSizeScale = Math.max(particleBoost * scale, 0.8)  // Ensure particles are always visible
+}
+
 // ─── Control Functions ───────────────────────────────────────────────────────
 
 export function updateParticleColor(hex) {
@@ -146,10 +177,21 @@ export function initParticleBackground(canvasEl) {
   const W = window.innerWidth
   const H = window.innerHeight
 
+  // Safety check: ensure canvas and dimensions are valid
+  if (W === 0 || H === 0) {
+    console.warn('Invalid canvas dimensions, deferring initialization')
+    setTimeout(() => initParticleBackground(canvasEl), 100)
+    return
+  }
+
   canvasEl.style.width = '100%'
   canvasEl.style.height = '100%'
   canvasEl.width = W
   canvasEl.height = H
+
+  // Calculate responsive scaling factors for mobile/tablet/desktop
+  calculateResponsiveScale()
+  console.log(`Responsive scale - Sphere: ${sphereRadiusScale.toFixed(2)}, Particle: ${particleSizeScale.toFixed(2)}`)
 
   const adjustedParticleCount = Math.max(
     280,
@@ -167,7 +209,8 @@ export function initParticleBackground(canvasEl) {
     canvas: canvasEl,
     antialias: quality.antialias,
     alpha: false,
-    powerPreference: 'high-performance'
+    powerPreference: 'high-performance',
+    failIfMajorPerformanceCaveat: false  // Don't fail on mobile, degrade gracefully
   })
   particleRenderer.setSize(W, H)
   particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
@@ -183,7 +226,7 @@ export function initParticleBackground(canvasEl) {
   window.addEventListener('deviceorientation', onDeviceOrientation)
 
   animate()
-  console.log(`✅ Particle background initialized (${particleCount} particles)`)
+  console.log(`✅ Particle background initialized (${particleCount} particles, scale: ${(sphereRadiusScale * 100).toFixed(0)}%)`)
 }
 
 // ─── Particle System ─────────────────────────────────────────────────────────
@@ -202,7 +245,7 @@ function createParticleSystem() {
   createSphere(particlePositions, basePositions, targetPositions)
 
   for (let i = 0; i < particleCount; i++) {
-    scales[i] = CONFIG.particleSize * (0.7 + Math.random() * CONFIG.particleSizeVariation)
+    scales[i] = CONFIG.particleSize * particleSizeScale * (0.7 + Math.random() * CONFIG.particleSizeVariation)
     glows[i] = 0.8 + Math.random() * 0.3
   }
 
@@ -235,7 +278,7 @@ function createParticleSystem() {
 }
 
 function createSphere(positions, base, target) {
-  const radius = CONFIG.sphereRadius
+  const radius = CONFIG.sphereRadius * sphereRadiusScale
 
   for (let i = 0; i < particleCount; i++) {
     const i3 = i * 3
@@ -267,7 +310,7 @@ function createSphere(positions, base, target) {
 // ─── Morphing (scroll) ───────────────────────────────────────────────────────
 
 function generateMorphShape(scrollProgress) {
-  const radius = CONFIG.sphereRadius
+  const radius = CONFIG.sphereRadius * sphereRadiusScale
   const shapes = [
     (i, theta, y) => {
       return [
@@ -329,8 +372,8 @@ function generateMorphShape(scrollProgress) {
 //   4. Smooth falloff gives the elastic-net soft feel.
 
 function applyCursorDeformation() {
-  const R = CONFIG.sphereRadius
-  const deformR = CONFIG.deformRadius
+  const R = CONFIG.sphereRadius * sphereRadiusScale
+  const deformR = CONFIG.deformRadius * sphereRadiusScale
   const falloff = CONFIG.deformFalloff
 
   // --- Find cursor world position ---
@@ -430,13 +473,13 @@ function applyCursorDeformation() {
     if (!cursorInsideSphere) {
       // ── Pull outward (stretch toward cursor) ──
       // Amount of pull tapers to 0 at deformR
-      displacement = CONFIG.pullStrength * influence
+      displacement = CONFIG.pullStrength * sphereRadiusScale * influence
       targetPositions[i3] = bx + nx * displacement
       targetPositions[i3 + 1] = by + ny * displacement
       targetPositions[i3 + 2] = bz + nz * displacement
     } else {
       // ── Push inward (dent/bend) ──
-      displacement = CONFIG.pushStrength * influence
+      displacement = CONFIG.pushStrength * sphereRadiusScale * influence
       targetPositions[i3] = bx - nx * displacement
       targetPositions[i3 + 1] = by - ny * displacement
       targetPositions[i3 + 2] = bz - nz * displacement
@@ -550,10 +593,24 @@ function animate() {
 function onWindowResize() {
   const W = window.innerWidth
   const H = window.innerHeight
+  
+  if (W === 0 || H === 0) return  // Prevent invalid sizing
+  
   particleCamera.aspect = W / H
   particleCamera.updateProjectionMatrix()
   particleRenderer.setSize(W, H)
   particleRenderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxDpr))
+  
+  // Recalculate responsive scales for new viewport size
+  const oldSphereScale = sphereRadiusScale
+  calculateResponsiveScale()
+  
+  // If sphere scale changed significantly, regenerate particle positions
+  if (Math.abs(sphereRadiusScale - oldSphereScale) > 0.05) {
+    // Regenerate positions with new scale
+    createSphere(particlePositions, basePositions, targetPositions)
+    particleGroup.geometry.attributes.position.needsUpdate = true
+  }
 }
 
 // ─── Cleanup ──────────────────────────────────────────────────────────────────
