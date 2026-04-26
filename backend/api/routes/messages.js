@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Message = require('../../models/Message')
 
+const EXPECTED_ADMIN_KEY = process.env.ADMIN_SECRET_KEY || process.env.ADMIN_KEY || 'arnob1812'
+
 // POST: Save a new Chithi (Public)
 router.post('/', async (req, res) => {
   try {
@@ -28,7 +30,7 @@ router.get('/', async (req, res) => {
   try {
     // Basic security check via query param for now
     const adminKey = req.query.key
-    if (adminKey !== process.env.ADMIN_SECRET_KEY && adminKey !== 'arnob1812') {
+    if (adminKey !== EXPECTED_ADMIN_KEY) {
       return res.status(401).json({ error: 'Unauthorized access' })
     }
 
@@ -43,7 +45,7 @@ router.get('/', async (req, res) => {
 router.patch('/:id/read', async (req, res) => {
   try {
     const adminKey = req.query.key
-    if (adminKey !== 'arnob1812') return res.status(401).json({ error: 'Unauthorized' })
+    if (adminKey !== EXPECTED_ADMIN_KEY) return res.status(401).json({ error: 'Unauthorized' })
 
     await Message.findByIdAndUpdate(req.params.id, { read: true })
     res.json({ success: true })
@@ -56,7 +58,7 @@ router.patch('/:id/read', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const adminKey = req.query.key
-    if (adminKey !== 'arnob1812') return res.status(401).json({ error: 'Unauthorized' })
+    if (adminKey !== EXPECTED_ADMIN_KEY) return res.status(401).json({ error: 'Unauthorized' })
 
     await Message.findByIdAndDelete(req.params.id)
     res.json({ success: true })

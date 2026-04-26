@@ -5,14 +5,29 @@ require('dotenv').config()
 
 const app = express()
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+  process.env.VERCEL_FRONTEND_URL
+].filter(Boolean)
+
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    process.env.FRONTEND_URL || 'http://localhost:5173',
-    process.env.VERCEL_FRONTEND_URL || ''
-  ],
+  origin: (origin, callback) => {
+    // Allow server-to-server calls and tools that send no Origin header.
+    if (!origin) return callback(null, true)
+
+    // Allow explicit configured origins.
+    if (allowedOrigins.includes(origin)) return callback(null, true)
+
+    // Allow Vercel preview and production domains.
+    if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
+      return callback(null, true)
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`))
+  },
   credentials: true
 }))
 app.use(express.json({ limit: '50mb' }))
@@ -54,7 +69,7 @@ app.use((err, req, res, next) => {
   })
 })
 
-if (process.env.NODE_ENV !== 'production') {
+if (require.main === module) {
   const PORT = process.env.PORT || 3001
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`)

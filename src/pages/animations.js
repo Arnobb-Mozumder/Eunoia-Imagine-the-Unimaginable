@@ -3,14 +3,13 @@
 // ==========================================
 import { animations as staticAnimations } from '../data/content.js'
 import { renderFooter } from './home.js'
+import { getAPIUrl } from '../config/api.js'
 
 // Global variable to store all animations (static + API)
 let allAnimations = [...staticAnimations]
 
 // Get API URL
-const API_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3001'
-  : 'https://your-backend-url.vercel.app'
+const API_URL = getAPIUrl()
 
 export function renderAnimations(container) {
   container.innerHTML = `
