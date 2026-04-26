@@ -13,6 +13,16 @@ let targetProgress = 0
 let mouseX = 0, mouseY = 0, targetMouseX = 0, targetMouseY = 0
 let touchStartY = 0
 let isInitialized = false
+let orientationBaseline = null
+
+function isSmallScreen() {
+  return window.innerWidth <= 900
+}
+
+function applyDeadzone(value, deadzone) {
+  if (Math.abs(value) <= deadzone) return 0
+  return value - Math.sign(value) * deadzone
+}
 
 const elementsData = [
   { type: 'intro', dist: 0.05, img: '/arnob.png' },
@@ -453,10 +463,24 @@ function onMouseMove(e) {
 
 function onDeviceOrientation(e) {
   if (e.gamma === null || e.beta === null) return
-  let x = e.gamma / 45
-  let y = (e.beta - 60) / 45
-  targetMouseX = Math.max(-1, Math.min(1, x))
-  targetMouseY = -Math.max(-1, Math.min(1, y))
+
+  if (!orientationBaseline) {
+    orientationBaseline = {
+      gamma: e.gamma,
+      beta: e.beta
+    }
+  }
+
+  const gammaDelta = e.gamma - orientationBaseline.gamma
+  const betaDelta = e.beta - orientationBaseline.beta
+
+  // Keep steering stable on phones: ignore tiny tilt and scale down movement.
+  const x = applyDeadzone(gammaDelta, 4) / 90
+  const y = applyDeadzone(betaDelta, 6) / 110
+  const clampRange = isSmallScreen() ? 0.35 : 0.6
+
+  targetMouseX = Math.max(-clampRange, Math.min(clampRange, x))
+  targetMouseY = -Math.max(-0.4, Math.min(0.4, y))
 }
 
 function onResize() {
@@ -544,15 +568,16 @@ function updatePosition() {
   offset.applyQuaternion(player.quaternion)
   camera.position.copy(player.position).add(offset)
   
-  // Smooth mouse interpolation
-  mouseX += (targetMouseX - mouseX) * 0.1
-  mouseY += (targetMouseY - mouseY) * 0.1
+  // Smooth interpolation (a bit slower on small screens for stability)
+  const lookSmoothing = isSmallScreen() ? 0.05 : 0.1
+  mouseX += (targetMouseX - mouseX) * lookSmoothing
+  mouseY += (targetMouseY - mouseY) * lookSmoothing
   
   // Lock the camera to player's rotation, then apply mouse look
   camera.quaternion.copy(player.quaternion)
   
-  // Limit camera rotation to 200 degrees total (100 left, 100 right)
-  const maxRotation = (100 * Math.PI) / 180
+  // Use a smaller yaw range on mobile to avoid oversteer from tiny tilt.
+  const maxRotation = ((isSmallScreen() ? 40 : 100) * Math.PI) / 180
   camera.rotateY(-mouseX * maxRotation) 
   
   // Limited up/down look
