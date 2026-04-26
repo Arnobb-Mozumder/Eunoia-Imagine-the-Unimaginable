@@ -820,9 +820,43 @@ input, textarea { font-family: var(--font-sans); }
   .hamburger { display: flex; }
   .mobile-menu { display: flex; }
 
+  .nav-inner {
+    padding: 0 var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .nav-logo-img {
+    width: clamp(120px, 42vw, 170px);
+    height: auto;
+  }
+
+  .nav-actions {
+    gap: var(--space-3);
+  }
+
   .container { padding: 0 var(--space-4); }
   .section { padding: var(--space-12) 0; }
 
   .footer-inner { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 420px) {
+  .nav-inner {
+    padding: 0 10px;
+  }
+
+  .nav-logo-img {
+    width: clamp(112px, 40vw, 148px);
+  }
+
+  .admin-btn,
+  .theme-customizer-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hamburger {
+    padding: 4px;
+  }
 }

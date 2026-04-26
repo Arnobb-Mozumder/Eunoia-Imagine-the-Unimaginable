@@ -467,6 +467,8 @@
 
   .hero-socials {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 
   .home-hero {
@@ -476,6 +478,39 @@
 
   .glass-panel-container {
     margin-top: var(--navbar-height);
+  }
+}
+
+@media (max-width: 420px) {
+  .home-hero {
+    padding: var(--space-6) 14px;
+  }
+
+  .hero-profile {
+    gap: var(--space-3);
+  }
+
+  .hero-profile-image-wrap {
+    width: 96px;
+    height: 96px;
+  }
+
+  .hero-profile-name {
+    font-size: clamp(1.85rem, 8.4vw, 2.4rem);
+    line-height: 1.15;
+  }
+
+  .hero-profile-title {
+    font-size: 1.08rem;
+  }
+
+  .hero-profile-description {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .hero-story-link {
+    margin-bottom: var(--space-5);
   }
 }
 
