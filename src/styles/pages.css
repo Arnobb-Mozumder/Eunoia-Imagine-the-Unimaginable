@@ -943,16 +943,29 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0 !important; /* Force hide by default */
-  pointer-events: none; /* Prevent accidental clicks while hidden */
+  opacity: 0 !important;
+  pointer-events: none;
   transform: translateY(-10px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.game-iframe-wrapper:hover .fullscreen-btn {
+/* Only show when hovering over the top-right zone (the header) */
+.game-iframe-header:hover .fullscreen-btn {
   opacity: 1 !important;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+.game-iframe-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px; /* Small hover zone in the corner */
+  height: 100px;
+  z-index: 101;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
 }
 
 .fullscreen-btn:hover {
@@ -986,7 +999,7 @@
   pointer-events: none;
 }
 
-.game-iframe-wrapper:fullscreen:hover .fullscreen-btn {
+.game-iframe-wrapper:fullscreen:hover .game-iframe-header .fullscreen-btn {
   opacity: 1 !important;
   pointer-events: auto;
 }
@@ -1003,7 +1016,7 @@
   pointer-events: none;
 }
 
-.game-iframe-wrapper:-webkit-full-screen:hover .fullscreen-btn {
+.game-iframe-wrapper:-webkit-full-screen:hover .game-iframe-header .fullscreen-btn {
   opacity: 1 !important;
   pointer-events: auto;
 }
