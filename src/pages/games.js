@@ -238,6 +238,7 @@ export function renderGameDetail(container, gameId) {
   if (playBtn) {
     playBtn.addEventListener('click', () => {
       const area = document.getElementById('game-embed-area')
+      if (game.embedUrl) {
         area.innerHTML = `
           <div class="game-iframe-wrapper" id="game-wrapper">
             <div class="game-iframe-header">
