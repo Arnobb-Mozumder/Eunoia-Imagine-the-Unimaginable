@@ -556,17 +556,22 @@ function setupAdminPanel(container) {
         const thumbFile = document.getElementById('game-thumb-file').files?.[0]
         if (thumbFile) formData.append('thumbnailFile', thumbFile)
 
+        console.log('Sending game data to:', `${API_URL}/api/games`)
         const response = await fetch(`${API_URL}/api/games`, {
           method: 'POST',
           headers: { 'x-admin-key': ADMIN_KEY },
           body: formData
         })
+        
         const data = await response.json()
+        console.log('Server response:', data)
+
         if (data.success) {
           showStatus('game-status', '✅ Game added!')
           gameForm.reset()
-        } else throw new Error(data.error)
+        } else throw new Error(data.error || 'Server returned failure')
       } catch (err) {
+        console.error('Submission error:', err)
         showStatus('game-status', '❌ Error: ' + err.message)
       } finally {
         submitBtn.disabled = false; submitBtn.textContent = originalText
