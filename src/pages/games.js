@@ -21,7 +21,8 @@ export async function renderGames(container) {
       // Intelligent Merge:
       // 1. Start with static games as the base
       const mergedGames = staticGames.map(sg => {
-        const dbGame = dbGames.find(dg => dg.id === sg.id)
+        // Try to find by ID or Title
+        const dbGame = dbGames.find(dg => dg.id === sg.id || dg.title.toLowerCase() === sg.title.toLowerCase())
         if (!dbGame) return sg
         
         // Use DB values, but fall back to static if DB value is empty/null
@@ -34,11 +35,23 @@ export async function renderGames(container) {
         return merged
       })
 
-      // 2. Add any games that exist in DB but NOT in static
+      // 2. Add any games that exist in DB but NOT in static (checking by ID and Title)
+      const staticTitles = new Set(staticGames.map(sg => sg.title.toLowerCase()))
       const staticIds = new Set(staticGames.map(sg => sg.id))
-      const uniqueDbGames = dbGames.filter(dg => !staticIds.has(dg.id))
+      
+      const uniqueDbGames = dbGames.filter(dg => 
+        !staticIds.has(dg.id) && !staticTitles.has(dg.title.toLowerCase())
+      )
       
       games = [...mergedGames, ...uniqueDbGames]
+      
+      // 3. Post-process: If a web game has a downloadUrl but no embedUrl, swap them
+      games = games.map(g => {
+        if ((g.type === 'web' || g.type === 'unity') && !g.embedUrl && g.downloadUrl) {
+          return { ...g, embedUrl: g.downloadUrl }
+        }
+        return g
+      })
     } else {
       games = staticGames
     }
