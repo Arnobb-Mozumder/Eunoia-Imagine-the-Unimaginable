@@ -999,7 +999,7 @@
   pointer-events: none;
 }
 
-.game-iframe-wrapper:fullscreen:hover .game-iframe-header .fullscreen-btn {
+.game-iframe-wrapper:fullscreen .game-iframe-header:hover .fullscreen-btn {
   opacity: 1 !important;
   pointer-events: auto;
 }
@@ -1016,7 +1016,7 @@
   pointer-events: none;
 }
 
-.game-iframe-wrapper:-webkit-full-screen:hover .game-iframe-header .fullscreen-btn {
+.game-iframe-wrapper:-webkit-full-screen .game-iframe-header:hover .fullscreen-btn {
   opacity: 1 !important;
   pointer-events: auto;
 }
