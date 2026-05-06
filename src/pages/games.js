@@ -11,12 +11,34 @@ let games = []
 export async function renderGames(container) {
   currentFilter = 'all'
   
-  // Try to fetch from API first, fallback to static content
+  // Try to fetch from API, then merge with static content
   try {
     const API_URL = getAPIUrl()
     const response = await fetch(`${API_URL}/api/games`)
     if (response.ok) {
-      games = await response.json()
+      const dbGames = await response.json()
+      
+      // Intelligent Merge:
+      // 1. Start with static games as the base
+      const mergedGames = staticGames.map(sg => {
+        const dbGame = dbGames.find(dg => dg.id === sg.id)
+        if (!dbGame) return sg
+        
+        // Use DB values, but fall back to static if DB value is empty/null
+        const merged = { ...sg }
+        Object.keys(dbGame).forEach(key => {
+          if (dbGame[key] !== null && dbGame[key] !== '' && dbGame[key] !== undefined) {
+            merged[key] = dbGame[key]
+          }
+        })
+        return merged
+      })
+
+      // 2. Add any games that exist in DB but NOT in static
+      const staticIds = new Set(staticGames.map(sg => sg.id))
+      const uniqueDbGames = dbGames.filter(dg => !staticIds.has(dg.id))
+      
+      games = [...mergedGames, ...uniqueDbGames]
     } else {
       games = staticGames
     }
@@ -164,7 +186,7 @@ export function renderGameDetail(container, gameId) {
               <h1 class="game-title">${game.title}</h1>
               <p class="game-detail-desc">${game.description}</p>
               <div class="game-detail-actions">
-                ${game.embedUrl || (game.type === 'web' || game.type === 'unity')
+                ${game.embedUrl
                   ? `<button class="btn btn-primary" id="play-btn">▶ Play Now</button>`
                   : ''
                 }
