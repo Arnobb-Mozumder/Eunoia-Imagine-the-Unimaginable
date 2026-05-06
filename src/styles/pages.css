@@ -982,6 +982,13 @@
 .game-iframe-wrapper:fullscreen .fullscreen-btn {
   top: 16px;
   right: 16px;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.game-iframe-wrapper:fullscreen:hover .fullscreen-btn {
+  opacity: 1 !important;
+  pointer-events: auto;
 }
 
 /* Webkit fullscreen */
@@ -992,6 +999,13 @@
 .game-iframe-wrapper:-webkit-full-screen .fullscreen-btn {
   top: 16px;
   right: 16px;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.game-iframe-wrapper:-webkit-full-screen:hover .fullscreen-btn {
+  opacity: 1 !important;
+  pointer-events: auto;
 }
 
 .iframe-placeholder {
