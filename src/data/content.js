@@ -61,6 +61,27 @@ export const games = [
     tags: ['Unity', 'RPG', 'WebGL'],
     year: 2025,
     featured: false
+  },
+  {
+    id: 'uno-no-mercy',
+    title: 'UNO: No Mercy',
+    type: 'web',
+    platform: 'Web',
+    genre: 'Card Game',
+    thumbnail: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1280&h=720&fit=crop',
+    embedUrl: 'https://uno-no-mercy-72wke9b6g-u2204100-6780s-projects.vercel.app/',
+    downloadUrl: null,
+    description: 'A high-stakes, ruthless version of the classic UNO card game. Featuring penalty stacking, 0/7 swapping rules, and a custom multiplayer engine.',
+    howToPlay: [
+      'Draw cards until you match the color or number',
+      '+2, +4, +6, and +10 cards can be STACKED',
+      'Play a 0 to rotate all hands clockwise',
+      'Play a 7 to swap hands with any player',
+      'Reach 25 cards and you are ELIMINATED'
+    ],
+    tags: ['Multiplayer', 'Strategy', 'Card Game', 'Three.js'],
+    year: 2024,
+    featured: true
   }
 ]
 
