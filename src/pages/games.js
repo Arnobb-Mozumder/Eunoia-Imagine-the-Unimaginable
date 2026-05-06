@@ -238,11 +238,22 @@ export function renderGameDetail(container, gameId) {
   if (playBtn) {
     playBtn.addEventListener('click', () => {
       const area = document.getElementById('game-embed-area')
-      if (game.embedUrl) {
         area.innerHTML = `
           <div class="game-iframe-wrapper" id="game-wrapper">
-            <button class="fullscreen-btn" id="fullscreen-toggle" title="Toggle fullscreen (F)">⛶ Fullscreen</button>
-            <iframe src="${game.embedUrl}" allowfullscreen allow="fullscreen" id="game-iframe"></iframe>
+            <div class="game-iframe-header">
+               <button class="fullscreen-btn" id="fullscreen-toggle" title="Toggle fullscreen (F)">⛶ Fullscreen</button>
+            </div>
+            <iframe 
+              src="${game.embedUrl}" 
+              allow="autoplay; fullscreen; keyboard-lock; keyboard" 
+              allowfullscreen 
+              id="game-iframe"
+              loading="lazy"
+            ></iframe>
+            <div class="iframe-blocked-msg" style="display:none; position:absolute; inset:0; background:var(--bg-tertiary); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
+               <p>If the game doesn't load, it might be blocked by your browser's security settings.</p>
+               <a href="${game.embedUrl}" target="_blank" class="btn btn-primary" style="margin-top:10px">Open in New Tab</a>
+            </div>
           </div>
         `
         setupFullscreen()
