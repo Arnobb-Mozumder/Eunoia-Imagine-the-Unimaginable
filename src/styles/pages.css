@@ -931,20 +931,26 @@
 ========================================== */
 .fullscreen-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 20px;
+  right: 20px;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 16px;
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  font-weight: 500;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  font-family: var(--font-sans);
-  transition: all var(--transition-base);
-  backdrop-filter: blur(10px);
+  opacity: 0; /* Hidden by default */
+  transform: translateY(-10px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-iframe-wrapper:hover .fullscreen-btn {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .fullscreen-btn:hover {
@@ -960,15 +966,6 @@
 .fullscreen-btn.fullscreen-active {
   background: var(--accent-gradient);
   border-color: transparent;
-  opacity: 0; /* Hidden by default in fullscreen */
-  transform: translateY(-10px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Show when mouse is in the top-right area of the wrapper */
-.game-iframe-wrapper:hover .fullscreen-btn.fullscreen-active {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .fullscreen-btn.fullscreen-active:hover {

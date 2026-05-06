@@ -250,8 +250,9 @@ export function renderGameDetail(container, gameId) {
               allowfullscreen 
               id="game-iframe"
               loading="lazy"
+              onerror="document.getElementById('iframe-error').style.display='flex'"
             ></iframe>
-            <div class="iframe-blocked-msg" style="display:none; position:absolute; inset:0; background:var(--bg-tertiary); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
+            <div id="iframe-error" class="iframe-blocked-msg" style="display:none; position:absolute; inset:0; background:var(--bg-tertiary); flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center; z-index:5;">
                <p>If the game doesn't load, it might be blocked by your browser's security settings.</p>
                <a href="${game.embedUrl}" target="_blank" class="btn btn-primary" style="margin-top:10px">Open in New Tab</a>
             </div>
