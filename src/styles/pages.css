@@ -943,13 +943,15 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0; /* Hidden by default */
+  opacity: 0 !important; /* Force hide by default */
+  pointer-events: none; /* Prevent accidental clicks while hidden */
   transform: translateY(-10px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .game-iframe-wrapper:hover .fullscreen-btn {
-  opacity: 1;
+  opacity: 1 !important;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
